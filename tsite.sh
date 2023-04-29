@@ -45,6 +45,8 @@ checkdomain(){
             checkdomain_result=4;
       elif [[ $1 = "000-default" ]]; then
             checkdomain_result=5;
+      elif [[ $1 = "default" ]]; then
+            checkdomain_result=5;
       elif [[ $1 == .* ]]; then
             checkdomain_result=6;
       elif [[ $1 == *. ]]; then
@@ -155,6 +157,8 @@ if [[ $1 = "add" ]]; then
             mkdir -p /var/www/$2/public_html/
             if [ -f "/var/www/000-default/public_html/index.php" ]; then
                   cp /var/www/000-default/public_html/index.php /var/www/$2/public_html/index.php &>/dev/null
+            elif [ -f "/var/www/default/public_html/index.php" ]; then
+                  cp /var/www/default/public_html/index.php /var/www/$2/public_html/index.php &>/dev/null
             else
                   echo "<html>" > /var/www/$2/public_html/index.php
                   echo "  <head>" >> /var/www/$2/public_html/index.php
@@ -178,10 +182,10 @@ if [[ $1 = "add" ]]; then
             if [[ -f "/etc/nginx/sites-enabled/$2" ]]; then
                   echo "[✔] Site enabled successfuly."
                   systemctl restart nginx.service &>/dev/null
-                  exit 0
+                  #exit 0 # Do not exit before adding to /etc/hosts!
             else
                   echo "[!] Site cannot enabled. (May be permission error)"
-                  exit 1
+                  #exit 1
             fi
 
             # === === Add to /etc/hosts now
@@ -191,16 +195,15 @@ if [[ $1 = "add" ]]; then
                   if ! grep -q "$2" /etc/hosts
                   then
                         echo "[!] Site cannot added to hosts file. (May be permission error)"
-                        exit 1
+                        #exit 1
                   else
-
                         echo "[✔] Site added to hosts file successfuly."
                         resolvectl flush-caches &>/dev/null
-                        exit 0
+                        #exit 0
                   fi
             else
-                  echo "[!] Domain found in /etc/hosts. (May be already added)"
-                  exit 1
+                  #echo "[!] Domain found in /etc/hosts. (May be already added)"
+                  #exit 1
             fi
       fi
 
@@ -281,9 +284,9 @@ elif [[ $1 = "del" ]]; then
 elif [[ $1 = "list" ]]; then
      
      # ls /etc/nginx/sites-available
-      SiteCount=`ls /etc/nginx/sites-available | sed -z 's/000-default\n//g' | wc -l`
+      SiteCount=`ls /etc/nginx/sites-available | sed -z 's/000-default\n//g' | sed -z 's/default\n//g' | wc -l`
       if (( $SiteCount > 0 )); then
-            ls /etc/nginx/sites-available | sed -z 's/000-default\n//g'
+            ls /etc/nginx/sites-available | sed -z 's/000-default\n//g' | sed -z 's/default\n//g'
       else
             echo "[i] No sites found."
       fi
@@ -479,7 +482,7 @@ elif [[ $1 = "sign-self" || $1 = "self-sign" ]]; then
       echo "[i] Generating self-signed key and certificate pair with OpenSSL (365 day, rsa:2048)..."
       echo "[i] - Location: /etc/ssl/private/nginx-selfsigned.key & /etc/ssl/certs/nginx-selfsigned.crt"
       
-      #openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+      openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
       if ! [[ -f "/etc/ssl/private/nginx-selfsigned.key" && -f "/etc/ssl/certs/nginx-selfsigned.crt" ]]; then
             echo "[!] Cannot generated self-sign key."
             exit 1
