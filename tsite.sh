@@ -538,7 +538,7 @@ elif [[ $1 = "sign-self" || $1 = "self-sign" ]]; then
       echo "[i] - Generated files:"
       echo "      /etc/ssl/private/nginx-selfsigned.key"
       echo "      /etc/ssl/certs/nginx-selfsigned.crt"
-      echo "      /etc/ssl/certs/nginx-selfsigned.cst"
+      echo "      /etc/ssl/certs/nginx-selfsigned.csr"
       echo "      /etc/nginx/dhparam.pem"
       exit 0
 
