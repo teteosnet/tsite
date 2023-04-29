@@ -483,6 +483,8 @@ elif [[ $1 = "sign-self" || $1 = "self-sign" ]]; then
       echo "[i] - Location: /etc/ssl/private/nginx-selfsigned.key & /etc/ssl/certs/nginx-selfsigned.crt"
       
       openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+      openssl x509 -x509toreq -in /etc/ssl/certs/nginx-selfsigned.crt -signkey /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.csr &>/dev/null
+
       if ! [[ -f "/etc/ssl/private/nginx-selfsigned.key" && -f "/etc/ssl/certs/nginx-selfsigned.crt" ]]; then
             echo "[!] Cannot generated self-sign key."
             exit 1
@@ -542,21 +544,23 @@ elif [[ $1 = "sign-self-renew" || $1 = "self-sign-renew" ]]; then
 
       CRT_OLD_MD5=`md5sum /etc/ssl/certs/nginx-selfsigned.crt`
       cp /etc/ssl/certs/nginx-selfsigned.crt /etc/ssl/certs/nginx-selfsigned.backup.crt &>/dev/null
+      cp /etc/ssl/certs/nginx-selfsigned.csr /etc/ssl/certs/nginx-selfsigned.backup.csr &>/dev/null
       if ! [ -f "/etc/ssl/certs/nginx-selfsigned.backup.crt" ]; then
             echo "[!] Backup failed for nginx-selfsigned.crt (May be permission error.)"
             exit 1
       fi
-      openssl x509 -x509toreq -in /etc/ssl/certs/nginx-selfsigned.crt -signkey /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned_new.csr &>/dev/null
-      if ! [ -f "/etc/ssl/certs/nginx-selfsigned_new.csr" ]; then
+      openssl x509 -x509toreq -in /etc/ssl/certs/nginx-selfsigned.crt -signkey /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.csr &>/dev/null
+      if ! [ -f "/etc/ssl/certs/nginx-selfsigned.csr" ]; then
             echo "[!] Failed to renew Self-Sign SSL. File cannot created. (May be permission error.)"
             exit 1
       fi
-      openssl x509 -req -days 365 -in /etc/ssl/certs/nginx-selfsigned_new.csr -signkey /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt &>/dev/null
+      openssl x509 -req -days 365 -in /etc/ssl/certs/nginx-selfsigned.csr -signkey /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt &>/dev/null
       CRT_NEW_MD5=`md5sum /etc/ssl/certs/nginx-selfsigned.crt`
 
       if [[ $CRT_NEW_MD5 = $CRT_OLD_MD5 ]]; then
             echo "[!] Failed to renew Self-Sign SSL."
             rm /etc/ssl/certs/nginx-selfsigned.crt || mv /etc/ssl/certs/nginx-selfsigned.backup.crt /etc/ssl/certs/nginx-selfsigned.crt ||
+            rm /etc/ssl/certs/nginx-selfsigned.csr || mv /etc/ssl/certs/nginx-selfsigned.backup.csr /etc/ssl/certs/nginx-selfsigned.csr ||
             exit 1
       fi
 
