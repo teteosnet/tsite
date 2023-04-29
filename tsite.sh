@@ -488,9 +488,9 @@ elif [[ $1 = "sign-self" || $1 = "self-sign" ]]; then
       
       echo "[i] Generating CSR file..."
       openssl x509 -x509toreq -in /etc/ssl/certs/nginx-selfsigned.crt -signkey /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.csr &>/dev/null
-      if ! [[ -f "/etc/ssl/private/nginx-selfsigned.csr" ]]; then
+      if ! [[ -f "/etc/ssl/certs/nginx-selfsigned.csr" ]]; then
             echo "[!] Cannot generate CSR file."
-	    rm -rf /etc/ssl/private/nginx-selfsigned.crt
+	    rm -rf /etc/ssl/certs/nginx-selfsigned.crt
 	    rm -rf /etc/ssl/private/nginx-selfsigned.key
             exit 1
       fi
