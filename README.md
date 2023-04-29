@@ -2,17 +2,28 @@
 
 A tool for manage nginx in Linux/PiluX
 
+Requirements:
+
+```
+nginx
+php8.2
+openssl
+```
+
 Installation for Linux distros (Not yet!)
 
 ```
  git clone https://github.com/hasanmerkit/tsite.git
 ```
- Or
+
+Or
+
 ```
  wget https://pilux.teteos.net/tools/tsite.sh
 ```
 
 Installation for PiluX based OS
+
 ```
  tsite
 ```
