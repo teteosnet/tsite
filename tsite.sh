@@ -201,7 +201,7 @@ if [[ $1 = "add" ]]; then
                         resolvectl flush-caches &>/dev/null
                         #exit 0
                   fi
-            else
+            #else
                   #echo "[!] Domain found in /etc/hosts. (May be already added)"
                   #exit 1
             fi
