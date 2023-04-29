@@ -480,20 +480,27 @@ elif [[ $1 = "local-del" ]]; then
 elif [[ $1 = "sign-self" || $1 = "self-sign" ]]; then
       
       echo "[i] Generating self-signed key and certificate pair with OpenSSL (365 day, rsa:2048)..."
-      echo "[i] - Location: /etc/ssl/private/nginx-selfsigned.key & /etc/ssl/certs/nginx-selfsigned.crt"
-      
       openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
-      openssl x509 -x509toreq -in /etc/ssl/certs/nginx-selfsigned.crt -signkey /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.csr &>/dev/null
-
       if ! [[ -f "/etc/ssl/private/nginx-selfsigned.key" && -f "/etc/ssl/certs/nginx-selfsigned.crt" ]]; then
             echo "[!] Cannot generated self-sign key."
             exit 1
       fi
+      
+      echo "[i] Generating CSR file..."
+      openssl x509 -x509toreq -in /etc/ssl/certs/nginx-selfsigned.crt -signkey /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.csr &>/dev/null
+      if ! [[ -f "/etc/ssl/private/nginx-selfsigned.csr" ]]; then
+            echo "[!] Cannot generate CSR file."
+	    rm -rf /etc/ssl/private/nginx-selfsigned.crt
+	    rm -rf /etc/ssl/private/nginx-selfsigned.key
+            exit 1
+      fi
+      
       echo "[i] Generating DH parameters..."
-      echo "[i] - Location: /etc/nginx/dhparam.pem"
       openssl dhparam -dsaparam -out /etc/nginx/dhparam.pem 4096 &>/dev/null
       if ! [[ -f "/etc/nginx/dhparam.pem" ]]; then
             echo "[!] Cannot generated self-sign key."
+	    rm -rf /etc/ssl/private/nginx-selfsigned.crt
+	    rm -rf /etc/ssl/private/nginx-selfsigned.key
             exit 1
       fi
 
@@ -528,6 +535,11 @@ elif [[ $1 = "sign-self" || $1 = "self-sign" ]]; then
       ufw delete allow 'Nginx HTTP' &>/dev/null
 
       echo "[✔] Generating self-signed key successfuly."
+      echo "[i] - Generated files:"
+      echo "      /etc/ssl/private/nginx-selfsigned.key"
+      echo "      /etc/ssl/certs/nginx-selfsigned.crt"
+      echo "      /etc/ssl/certs/nginx-selfsigned.cst"
+      echo "      /etc/nginx/dhparam.pem"
       exit 0
 
 # ========================================================================
