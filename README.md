@@ -2,7 +2,7 @@
 
 A tool for manage nginx in Linux/PiluX
 
-Requirements:
+## Requirements:
 
 ```
 nginx
@@ -10,25 +10,14 @@ php8.2
 openssl
 ```
 
-Installation for Linux distros (Not yet!)
+## Installation for Linux distros
 
 ```
- git clone https://github.com/hasanmerkit/tsite.git
+ git clone https://github.com/teteosnet/tsite.git && cd tsite
+ ./tsite.sh copybin
 ```
 
-Or
-
-```
- wget https://pilux.teteos.net/tools/tsite.sh
-```
-
-Installation for PiluX based OS
-
-```
- tsite
-```
-
-Usage:
+## Usage:
 
 ```
  - Site managing:
@@ -55,7 +44,7 @@ Usage:
       ssl-off [domain name]          disable SSL for a site (self-sign)
 ```
 
-Example:
+## Examples:
 
 ```
   tsite add example.com # add example.com to your nginx
