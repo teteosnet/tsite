@@ -507,12 +507,12 @@ elif [[ $1 = "firewall" ]]; then
                         echo "[!] Site cannot added to hosts file. (Write or permission error.)"
                         exit 1
                   else
-                        echo "[✔] Site added to hosts file successfuly."
+                        echo "[√] Site added to hosts file successfuly."
                         resolvectl flush-caches &>/dev/null
                         exit 1
                   fi
             else
-                  echo "[✔] Site added to hosts file successfuly."
+                  echo "[√] Site added to hosts file successfuly."
                   resolvectl flush-caches &>/dev/null
                   exit 1
             fi
@@ -547,7 +547,7 @@ elif [[ $1 = "local-del" ]]; then
                   exit 1
             else
 
-                  echo "[✔] Site deleted in hosts file successfuly."
+                  echo "[√] Site deleted in hosts file successfuly."
                   exit 1
             fi
       else
@@ -625,7 +625,7 @@ elif [[ $1 = "ssl-signself" || $1 = "ssl-selfsign" ]]; then
       fi
       unset REGCHECK
 
-      echo "[✔] Generating self-signed key successfuly."
+      echo "[√] Generating self-signed key successfuly."
       echo "[i] - Generated files:"
       echo "      /etc/ssl/private/nginx-selfsigned.key (ssl-signself-showkey)"
       echo "      /etc/ssl/certs/nginx-selfsigned.crt (ssl-signself-showcrt)"
@@ -665,7 +665,7 @@ elif [[ $1 = "ssl-signself-renew" || $1 = "ssl-selfsign-renew" ]]; then
             exit 1
       fi
 
-      echo "[✔] Renewing self-signed key successfuly."
+      echo "[√] Renewing self-signed key successfuly."
       systemctl restart nginx.service &>/dev/null
       exit 0
 
@@ -740,7 +740,7 @@ elif [[ $1 = "ssl-on" ]]; then
                   echo "[!] SSL cannot added to site. (Write or permission error.)"
                   exit 0
             else
-                  echo "[✔] SSL added to site successfuly."
+                  echo "[√] SSL added to site successfuly."
                   systemctl restart nginx.service &>/dev/null
                   exit 1
             fi
@@ -784,7 +784,7 @@ elif [[ $1 = "ssl-off" ]]; then
                   echo "[!] SSL cannot removed to site. (Write or permission error.)"
                   exit 0
             else
-                  echo "[✔] SSL removed in site successfuly."
+                  echo "[√] SSL removed in site successfuly."
                   systemctl restart nginx.service &>/dev/null
                   exit 0
             fi
