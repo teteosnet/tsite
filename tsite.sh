@@ -24,6 +24,11 @@ fi
 #
 PILUX_OS_NAME=`cat /teteosnet/OS/Name`
 
+#
+# Create folder if not exist /var/log/nginx
+#
+mkdir -p /var/log/nginx
+
 # ========================================================================
 # Functions
 # ========================================================================
