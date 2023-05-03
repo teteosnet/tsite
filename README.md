@@ -13,8 +13,7 @@ openssl
 ## Installation for Linux distros
 
 ```
- git clone https://github.com/teteosnet/tsite.git && cd tsite
- ./tsite.sh copybin
+ git clone https://github.com/teteosnet/tsite.git && chmod +x ./tsite/tsite.sh && sudo ./tsite/tsite.sh copybin
 ```
 
 ## Usage:
