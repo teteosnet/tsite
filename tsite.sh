@@ -112,6 +112,7 @@ if [[ $1 = "" || $1 = "--help" || $1 = "-help" || $1 = "help" || $1 = "/?" || $1
 # - copybin
 # ========================================================================
 elif [[ $1 = "copybin" ]]; then
+      if [[ ! $0 = "/teteosnet/Bin/tsite" && ! $0 = "/usr/sbin/tsite" ]]; then
 
       # === === Check who is executing.
       if [ ! `whoami` = 'root' ]; then
@@ -142,6 +143,8 @@ elif [[ $1 = "copybin" ]]; then
             echo "[√] Script added to this system as command."
       fi
       exit 0
+
+      fi
 
 # ========================================================================
 # - list
