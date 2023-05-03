@@ -31,26 +31,26 @@ Installation for PiluX based OS
 Usage:
 
 ```
-  - Site managing:
+ - Site managing:
       list                           list sites available
       add [domain name]              add a site
-                                     (create /var/www/[domain name]/public_html/)
       add [domain name] localwork    add a site, enable and add to hosts file
-                                     (create /var/www/[domain name]/public_html/)
       del [domain name]              delete a site
-      del [domain name] all          delete a site
-                                     (with /var/www/ files!)
       enable [domain name]           enable a site
       disable [domain name]          disable a site
 
  - Server managing: 
       restart                        restart services
+      firewall                       try allow 80 and 443 ports by firewalls
       local-add                      add site to hosts file with "localhost" ip
       local-del                      del site to hosts file with "localhost" ip
 
  - SSL: 
-      sign-self                      create and config nginx self-sign ssl
-      sign-self-renew                renew signed ssl (365 day)
+      ssl-signself                   create and config nginx self-sign ssl
+      ssl-signself-renew             renew signed ssl (365 day)
+      ssl-signself-showcrt           show self-sign certificate
+      ssl-signself-showcsr           show self-sign certificate request
+      ssl-signself-showkey           show self-sign certificate private(!) key 
       ssl-on [domain name]           enable SSL for a site (self-sign)
       ssl-off [domain name]          disable SSL for a site (self-sign)
 ```
